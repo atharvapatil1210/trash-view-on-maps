@@ -1,0 +1,20 @@
+# Node.js dependencies
+node_modules/
+
+# Environment variables
+.env
+
+# Logs
+*.log
+
+# Docker
+*.dockerignore
+Dockerfile.local
+
+# Build/Generated files
+dist/
+build/
+
+# OS-specific files
+.DS_Store
+Thumbs.db

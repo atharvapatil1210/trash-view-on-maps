@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Trash Detection Game</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="start-screen">
+    <h1 id="game-title">Find Trash in Indian Cities</h1>
+    <button id="start-button">START GAME</button>
+  </div>
+
+  <div id="game-container" style="display: none;">
+    <h1 id="game-title">Find Trash in Indian Cities</h1>
+    <div id="score-counter">Score: <span id="score">0</span>/10</div>
+    <div id="map"></div>
+    <div id="game-controls">
+      <div id="decision-buttons">
+        <button id="yes-button" class="option-button">YES</button>
+        <button id="no-button" class="option-button">NO</button>
+      </div>
+      <button id="next-button" style="display: none;">NEXT</button>
+    </div>
+  </div>
+
+  <div id="end-screen" style="display: none;">
+    <h2>Game Over! Nobody Wins :(</h2>
+    <p>You found trash in <span id="final-score">0</span>/10 locations.</p>
+    <p>It is a serious problem. Watch the video to know more and what you can do about it.</p>
+    <iframe
+      width="560"
+      height="315"
+      src="https://www.youtube.com/embed/Be-QX2fkb30?si=90QOlDVYCPjBktJ7"
+      title="YouTube video player"
+      frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      referrerpolicy="strict-origin-when-cross-origin"
+      allowfullscreen>
+    </iframe>
+    <div id="replay-container">
+      <button id="restart-button">PLAY AGAIN</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script async defer src="/api/maps?callback=initializeMap"></script>
+</body>
+</html>
