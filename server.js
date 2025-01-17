@@ -1,31 +1,36 @@
 require("dotenv").config();
 const express = require("express");
-const app = express();
 const path = require("path");
+const crypto = require("crypto");
 const fetch = (...args) =>
   import("node-fetch").then(({ default: fetch }) => fetch(...args)); // Use dynamic import for node-fetch
+
+const app = express();
+
+// Function to generate signed URLs
+function generateSignedUrl(path, secret) {
+  const decodedSecret = Buffer.from(secret, "base64");
+  const signature = crypto
+    .createHmac("sha1", decodedSecret)
+    .update(path)
+    .digest("base64")
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_");
+  return `${path}&signature=${signature}`;
+}
 
 // Serve static files
 app.use(express.static(path.join(__dirname, "public")));
 
-// Serve index.html with the API key dynamically injected
-app.get("/", (req, res) => {
-  const filePath = path.join(__dirname, "public", "index.html");
-  res.sendFile(filePath, {}, (err) => {
-    if (err) {
-      console.error("Error serving index.html:", err);
-      res.status(500).send("Error loading the page.");
-    }
-  });
-});
-
-// API endpoint to dynamically inject the Google Maps script
+// Serve the Google Maps API script with signed URLs
 app.get("/api/maps", (req, res) => {
-  const apiKey = process.env.GOOGLE_MAPS_API_KEY;
-  const callback = req.query.callback || "initializeMap";
+  const basePath = "/maps/api/js";
+  const params = `key=${process.env.GOOGLE_MAPS_API_KEY}&callback=${req.query.callback || "initializeMap"}`;
+  const signedUrl = generateSignedUrl(`${basePath}?${params}`, process.env.SIGNING_SECRET);
+
   res.type("application/javascript").send(`
     const script = document.createElement('script');
-    script.src = "https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=${callback}";
+    script.src = "https://maps.googleapis.com${signedUrl}";
     document.body.appendChild(script);
   `);
 });
@@ -54,9 +59,12 @@ app.get("/api/streetview", async (req, res) => {
   }
 
   async function validateStreetView(lat, lon) {
-    const url = `https://maps.googleapis.com/maps/api/streetview/metadata?location=${lat},${lon}&key=${process.env.GOOGLE_MAPS_API_KEY}`;
+    const basePath = "/maps/api/streetview/metadata";
+    const params = `location=${lat},${lon}&key=${process.env.GOOGLE_MAPS_API_KEY}`;
+    const signedUrl = generateSignedUrl(`${basePath}?${params}`, process.env.SIGNING_SECRET);
+
     try {
-      const response = await fetch(url);
+      const response = await fetch(`https://maps.googleapis.com${signedUrl}`);
       const data = await response.json();
       return data.status === "OK";
     } catch (error) {
@@ -70,17 +78,13 @@ app.get("/api/streetview", async (req, res) => {
     const maxPoints = 10;
 
     while (points.length < maxPoints) {
-      try {
-        const coords = getRandomCoordinates();
-        const isValid = await validateStreetView(coords.lat, coords.lon);
-        if (isValid) {
-          console.log(`Valid coordinates added: ${JSON.stringify(coords)}`);
-          points.push(coords);
-        } else {
-          console.log(`No Street View available for: ${JSON.stringify(coords)}`);
-        }
-      } catch (error) {
-        console.error("Error generating Street View point:", error);
+      const coords = getRandomCoordinates();
+      const isValid = await validateStreetView(coords.lat, coords.lon);
+      if (isValid) {
+        console.log(`Valid coordinates added: ${JSON.stringify(coords)}`);
+        points.push(coords);
+      } else {
+        console.log(`No Street View available for: ${JSON.stringify(coords)}`);
       }
     }
 

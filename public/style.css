@@ -21,52 +21,96 @@ body {
   box-sizing: border-box;
 }
 
+/* Retro Title */
 #game-title {
-  font-size: 36px; /* Default font size for larger screens */
+  font-size: 36px; /* Scales for larger screens */
   color: #ffcc00;
   text-shadow: 2px 2px #ff6600;
   margin-bottom: 30px;
-  line-height: 1.5; /* Add spacing between lines */
+  line-height: 1.5;
+  opacity: 0; /* Hidden initially for animation */
+  animation: retroFadeIn 1.5s ease-out forwards;
+  animation-delay: 0.5s; /* Smooth load */
   text-align: center;
   word-wrap: break-word; /* Ensure wrapping works */
 }
 
-/* Start Button */
+/* Retro Start Button */
 #start-button {
   font-family: 'Press Start 2P', cursive;
   background-color: #ff6600;
   color: #fff;
   border: none;
   border-radius: 8px;
-  padding: 15px 30px;
-  font-size: 18px;
+  padding: 20px 40px;
+  font-size: 20px;
   cursor: pointer;
-  margin: 10px;
-  box-shadow: 2px 2px 4px #000;
+  margin: 15px;
+  box-shadow: 3px 3px 6px #000;
   transition: transform 0.2s, box-shadow 0.2s;
+  opacity: 0;
+  animation: retroFadeIn 1.5s ease-out forwards, buttonPulse 2s infinite ease-in-out;
+  animation-delay: 2s; /* Delay to appear after title */
 }
 
 #start-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 4px 4px 8px #000;
+  transform: translateY(-3px); /* Slightly larger hover effect */
+  box-shadow: 5px 5px 10px #000;
 }
 
-/* Responsive Design for Mobile */
-@media (max-width: 768px) {
-  #game-title {
-    font-size: 50px; /* Larger font size for mobile */
-    margin-bottom: 20px;
-    word-break: break-word; /* Ensure words break onto new lines */
-  }
+/* Loading Screen */
+#loading-screen {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #000;
+  color: #fff;
+  text-align: center;
+  font-family: 'Press Start 2P', cursive;
+}
 
-  #start-button {
-    font-size: 20px; /* Larger button text */
-    padding: 15px 30px; /* Increase padding for better visibility */
-  }
+#loading-screen h1 {
+  font-size: 24px;
+  color: #ffcc00;
+  text-shadow: 2px 2px #ff6600;
+  margin-bottom: 20px;
+}
 
-  #start-screen {
-    padding: 30px; /* Ensure consistent padding */
-  }
+#loading-screen p {
+  font-size: 16px;
+  margin: 10px 0;
+}
+
+#loading-screen ul {
+  list-style: none;
+  padding: 0;
+}
+
+#loading-screen li {
+  font-size: 14px;
+  color: #33cc33;
+  margin: 5px 0;
+}
+
+#understood-button {
+  font-family: 'Press Start 2P', cursive;
+  background-color: #ff6600;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 20px 40px;
+  font-size: 20px;
+  cursor: pointer;
+  margin-top: 20px;
+  box-shadow: 3px 3px 6px #000;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+#understood-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 5px 5px 10px #000;
 }
 
 /* Game Container */
@@ -74,13 +118,6 @@ body {
   display: none; /* Hidden until game starts */
   margin: 0 auto;
   padding: 20px;
-}
-
-#game-title {
-  font-size: 36px;
-  color: #ffcc00;
-  text-shadow: 2px 2px #ff6600;
-  margin-bottom: 20px;
 }
 
 #score-counter {
@@ -122,25 +159,24 @@ body {
   color: #fff;
   border: none;
   border-radius: 8px;
-  padding: 15px 30px;
-  font-size: 18px;
+  padding: 20px 40px;
+  font-size: 20px;
   cursor: pointer;
-  box-shadow: 2px 2px 4px #000;
+  box-shadow: 3px 3px 6px #000;
   transition: transform 0.2s, box-shadow 0.2s;
 }
 
 #yes-button:hover,
 #no-button:hover,
 #next-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 4px 4px 8px #000;
+  transform: translateY(-3px);
+  box-shadow: 5px 5px 10px #000;
 }
 
 #next-button {
   display: none;
   margin-top: 20px; /* Space above the Next button */
 }
-
 
 /* End Screen */
 #end-screen {
@@ -171,18 +207,89 @@ body {
 }
 
 #restart-button {
-  background-color: #4CAF50;
+  font-family: 'Press Start 2P', cursive;
+  background-color: #ff6600;
   color: #fff;
   border: none;
-  border-radius: 5px;
-  padding: 15px 30px;
-  font-size: 18px;
+  border-radius: 8px;
+  padding: 20px 40px;
+  font-size: 20px;
   cursor: pointer;
-  margin-top: 20px;
-  box-shadow: 2px 2px 4px #000;
+  margin: 15px;
+  box-shadow: 3px 3px 6px #000;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
 #restart-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 4px 4px 8px #000;
+  transform: translateY(-3px);
+  box-shadow: 5px 5px 10px #000;
 }
+
+/* Spinner for Loading Animation */
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid white;
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Retro Animations */
+@keyframes retroFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  50% {
+    opacity: 0.5;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes buttonPulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 5px #ffcc00;
+  }
+  50% {
+    transform: scale(1.1);
+    box-shadow: 0 0 15px #ff6600;
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 5px #ffcc00;
+  }
+}
+
+/* Responsive Design for Mobile */
+@media (max-width: 768px) {
+  #game-title {
+    font-size: 50px;
+    margin-bottom: 20px;
+    word-break: break-word;
+  }
+
+  button {
+    font-size: 18px; /* Adjust button size for smaller screens */
+    padding: 15px 30px;
+  }
+
+  #start-screen, #loading-screen {
+    padding: 15px;
+  }
+} 

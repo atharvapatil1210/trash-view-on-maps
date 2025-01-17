@@ -10,7 +10,24 @@
     <h1 id="game-title">Find Trash in Indian Cities</h1>
     <button id="start-button">START GAME</button>
   </div>
-
+  <div id="loading-screen" style="display: none;">
+    <h1>Welcome to the Trash Detection Game!</h1>
+    <p>Your mission is to find trash in random locations in these cities:</p>
+    <ul id="city-list">
+      <li>Delhi</li>
+      <li>Mumbai</li>
+      <li>Bangalore</li>
+      <li>Kolkata</li>
+      <li>Chennai</li>
+      <li>Hyderabad</li>
+      <li>Pune</li>
+      <li>Ahmedabad</li>
+      <li>Jaipur</li>
+      <li>Lucknow</li>
+    </ul>
+    <p>Make sure to move the image around, and be thorough.</p>
+    <button id="understood-button">I’ve Understood</button>
+  </div>  
   <div id="game-container" style="display: none;">
     <h1 id="game-title">Find Trash in Indian Cities</h1>
     <div id="score-counter">Score: <span id="score">0</span>/10</div>
@@ -28,21 +45,18 @@
     <h2>Game Over! Nobody Wins :(</h2>
     <p>You found trash in <span id="final-score">0</span>/10 locations.</p>
     <p>It is a serious problem. Watch the video to know more and what you can do about it.</p>
-    <iframe
-      width="560"
-      height="315"
-      src="https://www.youtube.com/embed/Be-QX2fkb30?si=90QOlDVYCPjBktJ7"
-      title="YouTube video player"
-      frameborder="0"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-      referrerpolicy="strict-origin-when-cross-origin"
-      allowfullscreen>
-    </iframe>
+    <iframe width="560" 
+      height="315" 
+      src="https://www.youtube.com/embed/uh1TJQbOcIQ?si=3htjcJLFxH16P2If" 
+      title="YouTube video player" 
+      frameborder="0" 
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+      referrerpolicy="strict-origin-when-cross-origin" 
+      allowfullscreen></iframe>
     <div id="replay-container">
       <button id="restart-button">PLAY AGAIN</button>
     </div>
   </div>
-
   <script src="script.js"></script>
   <script async defer src="/api/maps?callback=initializeMap"></script>
 </body>
