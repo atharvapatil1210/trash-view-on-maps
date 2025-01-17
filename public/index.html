@@ -1,51 +1,51 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Trash Detection Game</title>
+  <title>कचरा शोधण्याचा खेळ</title>
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-  <link rel="icon" href="public\favicon.ico" type="image/x-icon">
+  <link rel="icon" href="public/favicon.ico" type="image/x-icon">
 </head>
 <body>
   <div id="start-screen">
-    <h1 id="game-title">Find Trash in Indian Cities</h1>
-    <button id="start-button">START GAME</button>
+    <h1 id="game-title">अकोल्यात कचरा शोधा</h1>
+    <button id="start-button">खेळ सुरू करा</button>
   </div>
   <div id="loading-screen" style="display: none;">
-    <h1>Welcome to the Trash Detection Game!</h1>
-    <p>Your mission is to find trash in random locations in these cities:</p>
+    <h1>कचरा शोधण्याच्या खेळात आपले स्वागत आहे!</h1>
+    <p>आपले मिशन म्हणजे अकोल्यातील वेगवेगळ्या ठिकाणी कचरा शोधणे:</p>
     <ul id="city-list">
-      <li>Delhi</li>
-      <li>Mumbai</li>
-      <li>Bangalore</li>
-      <li>Kolkata</li>
-      <li>Chennai</li>
-      <li>Hyderabad</li>
-      <li>Pune</li>
-      <li>Ahmedabad</li>
-      <li>Jaipur</li>
-      <li>Lucknow</li>
+      <li>राज राजेश्वर मंदिर</li>
+      <li>जठारपेठ</li>
+      <li>अकोला बाजार</li>
+      <li>मोठी उमरी</li>
+      <li>गांधी चौक</li>
+      <li>रेल्वे स्टेशन चौक</li>
+      <li>कौलखेड चौक</li>
+      <li>बस स्थानक</li>
+      <li>टॉवर चौक</li>
+      <li>ट्युशन एरिया</li>
     </ul>
-    <p>Make sure to move the image around, and be thorough.</p>
-    <button id="understood-button">I’ve Understood</button>
+    <p>प्रतिमा नीट हलवा आणि काळजीपूर्वक शोधा.</p>
+    <button id="understood-button">समजले</button>
   </div>  
   <div id="game-container" style="display: none;">
-    <h1 id="game-title">Find Trash in Indian Cities</h1>
-    <div id="score-counter">Score: <span id="score">0</span>/10</div>
+    <h1 id="game-title">अकोल्यातील ठिकाणी कचरा शोधा</h1>
+    <div id="score-counter">गुण: <span id="score">0</span>/10</div>
     <div id="map"></div>
     <div id="game-controls">
       <div id="decision-buttons">
-        <button id="yes-button" class="option-button">YES</button>
-        <button id="no-button" class="option-button">NO</button>
+        <button id="yes-button" class="option-button">हो</button>
+        <button id="no-button" class="option-button">नाही</button>
       </div>
-      <button id="next-button" style="display: none;">NEXT</button>
+      <button id="next-button" style="display: none;">पुढे</button>
     </div>
   </div>
 
   <div id="end-screen" style="display: none;">
-    <h2>Game Over! Nobody Wins :(</h2>
-    <p>You found trash in <span id="final-score">0</span>/10 locations.</p>
-    <p>It is a serious problem. Watch the video to know more and what you can do about it.</p>
+    <h2>खेळ संपला! कोणी जिंकले नाही :(</h2>
+    <p>तुम्ही <span id="final-score">0</span>/10 ठिकाणी कचरा शोधला.</p>
+    <p>ही एक गंभीर समस्या आहे. याबद्दल अधिक जाणून घेण्यासाठी आणि तुम्ही काय करू शकता ते पाहण्यासाठी व्हिडिओ बघा.</p>
     <iframe 
       width="560" 
       height="315" 
@@ -56,7 +56,7 @@
       referrerpolicy="strict-origin-when-cross-origin" 
       allowfullscreen></iframe>
     <div id="replay-container">
-      <button id="restart-button">PLAY AGAIN</button>
+      <button id="restart-button">पुन्हा खेळा</button>
     </div>
   </div>
   <script src="script.js"></script>

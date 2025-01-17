@@ -7,7 +7,21 @@ const fetch = (...args) =>
 
 const app = express();
 
-// Function to generate signed URLs
+// Predefined list of Akola landmarks and coordinates
+const akolaLocations = [
+  { name: "राज राजेश्वर मंदिर", lat: 20.7048, lon: 77.0170 },
+  { name: "जठारपेठ", lat: 20.7112, lon: 77.0235 },
+  { name: "अकोला बाजार", lat: 20.7053, lon: 77.0185 },
+  { name: "मोठी उमरी", lat: 20.7184, lon: 77.0160 },
+  { name: "गांधी चौक", lat: 20.7010, lon: 77.0195 },
+  { name: "रेल्वे स्टेशन चौक", lat: 20.7092, lon: 77.0213 },
+  { name: "कौलखेड चौक", lat: 20.7105, lon: 77.0165 },
+  { name: "बस स्थानक", lat: 20.7058, lon: 77.0148 },
+  { name: "टॉवर चौक", lat: 20.7118, lon: 77.0122 },
+  { name: "ट्युशन एरिया", lat: 20.7135, lon: 77.0198 }
+];
+
+// Function to generate signed URLs for Google Maps API
 function generateSignedUrl(path, secret) {
   const decodedSecret = Buffer.from(secret, "base64");
   const signature = crypto
@@ -35,29 +49,25 @@ app.get("/api/maps", (req, res) => {
   `);
 });
 
-// API endpoint for getting 10 random valid Street View points
+// API endpoint to generate random coordinates within Akola bounds and return predefined points
 app.get("/api/streetview", async (req, res) => {
-  const CITY_BOUNDS = [
-    { name: "Delhi", min_lat: 28.4041, max_lat: 28.8813, min_lon: 76.8371, max_lon: 77.3319 },
-    { name: "Mumbai", min_lat: 18.8941, max_lat: 19.2719, min_lon: 72.7757, max_lon: 72.9868 },
-    { name: "Bangalore", min_lat: 12.8685, max_lat: 13.1615, min_lon: 77.4913, max_lon: 77.7047 },
-    { name: "Kolkata", min_lat: 22.4373, max_lat: 22.7364, min_lon: 88.2444, max_lon: 88.4368 },
-    { name: "Chennai", min_lat: 12.8996, max_lat: 13.1434, min_lon: 80.1638, max_lon: 80.3055 },
-    { name: "Hyderabad", min_lat: 17.2782, max_lat: 17.5461, min_lon: 78.3498, max_lon: 78.5825 },
-    { name: "Pune", min_lat: 18.4321, max_lat: 18.6177, min_lon: 73.7518, max_lon: 73.9842 },
-    { name: "Ahmedabad", min_lat: 22.9413, max_lat: 23.1266, min_lon: 72.5021, max_lon: 72.6616 },
-    { name: "Jaipur", min_lat: 26.7846, max_lat: 27.0451, min_lon: 75.7333, max_lon: 75.9616 },
-    { name: "Lucknow", min_lat: 26.7674, max_lat: 27.0113, min_lon: 80.8170, max_lon: 81.0296 },
-  ];
+  // Akola coordinates bounds
+  const AKOLA_BOUNDS = {
+    min_lat: 20.6980,
+    max_lat: 20.7250,
+    min_lon: 77.0100,
+    max_lon: 77.0250
+  };
 
+  // Function to generate random coordinates within Akola bounds
   function getRandomCoordinates() {
-    const city = CITY_BOUNDS[Math.floor(Math.random() * CITY_BOUNDS.length)];
-    const lat = Math.random() * (city.max_lat - city.min_lat) + city.min_lat;
-    const lon = Math.random() * (city.max_lon - city.min_lon) + city.min_lon;
-    console.log(`Generated coordinates for ${city.name}: { lat: ${lat}, lon: ${lon} }`);
-    return { lat, lon, city: city.name };
+    const lat = Math.random() * (AKOLA_BOUNDS.max_lat - AKOLA_BOUNDS.min_lat) + AKOLA_BOUNDS.min_lat;
+    const lon = Math.random() * (AKOLA_BOUNDS.max_lon - AKOLA_BOUNDS.min_lon) + AKOLA_BOUNDS.min_lon;
+    console.log(`Generated random coordinates: { lat: ${lat}, lon: ${lon} }`);
+    return { lat, lon };
   }
 
+  // Function to validate if a location has street view
   async function validateStreetView(lat, lon) {
     const basePath = "/maps/api/streetview/metadata";
     const params = `location=${lat},${lon}&key=${process.env.GOOGLE_MAPS_API_KEY}`;
@@ -66,7 +76,7 @@ app.get("/api/streetview", async (req, res) => {
     try {
       const response = await fetch(`https://maps.googleapis.com${signedUrl}`);
       const data = await response.json();
-      // Only fetch images where Street View exists and verified by Google
+      // Only fetch images where Street View exists and is verified by Google
       return data.status === "OK" && data.copyright === "© Google";
     } catch (error) {
       console.error("Error validating Street View:", error);
@@ -74,20 +84,31 @@ app.get("/api/streetview", async (req, res) => {
     }
   }
 
+  // Function to get a mix of random and predefined points
   async function getStreetViewPoints() {
     const points = [];
     const maxPoints = 10;
 
-    while (points.length < maxPoints) {
+    // First, add some random coordinates
+    while (points.length < maxPoints / 2) {
       const coords = getRandomCoordinates();
       const isValid = await validateStreetView(coords.lat, coords.lon);
       if (isValid) {
-        console.log(`Valid coordinates added: ${JSON.stringify(coords)}`);
-        points.push(coords);
+        console.log(`Valid random coordinates added: ${JSON.stringify(coords)}`);
+        points.push({ lat: coords.lat, lon: coords.lon, name: "Random Location" });
       } else {
-        console.log(`No Street View available for: ${JSON.stringify(coords)}`);
+        console.log(`No Street View available for random location: ${JSON.stringify(coords)}`);
       }
     }
+
+    // Then, add predefined Akola points
+    akolaLocations.forEach(location => {
+      points.push({
+        lat: location.lat,
+        lon: location.lon,
+        name: location.name
+      });
+    });
 
     return points;
   }
@@ -106,3 +127,4 @@ const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
+
