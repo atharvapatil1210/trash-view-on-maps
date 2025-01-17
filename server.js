@@ -66,7 +66,8 @@ app.get("/api/streetview", async (req, res) => {
     try {
       const response = await fetch(`https://maps.googleapis.com${signedUrl}`);
       const data = await response.json();
-      return data.status === "OK";
+      // Only fetch images where Street View exists and verified by Google
+      return data.status === "OK" && data.copyright === "© Google";
     } catch (error) {
       console.error("Error validating Street View:", error);
       return false;
